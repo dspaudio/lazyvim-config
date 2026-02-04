@@ -9,7 +9,12 @@
 
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
   pattern = "*",
-  command = "if mode() != 'c' | checktime | endif",
+  callback = function()
+    -- command-line window에서는 실행하지 않음
+    if vim.fn.getcmdwintype() == "" and vim.fn.mode() ~= "c" then
+      vim.cmd("checktime")
+    end
+  end,
 })
 
 vim.api.nvim_create_autocmd("FileChangedShellPost", {
