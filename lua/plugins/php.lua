@@ -23,10 +23,14 @@ return {
         end
         local content = f:read("*a")
         f:close()
-        local has_pest = content:match("it%s*%(")
-          or content:match("test%s*%(")
-          or content:match("describe%s*%(")
-          or content:match("uses%s*%(")
+        local has_pest = content:match("%Wit%s*%(")
+          or content:match("%Wtest%s*%(")
+          or content:match("%Wdescribe%s*%(")
+          or content:match("%Wuses%s*%(")
+          or content:match("^it%s*%(")
+          or content:match("^test%s*%(")
+          or content:match("^describe%s*%(")
+          or content:match("^uses%s*%(")
         return has_pest ~= nil
       end
 
@@ -40,7 +44,12 @@ return {
         end
         local content = f:read("*a")
         f:close()
-        local has_pest = content:match("it%s*%(") or content:match("test%s*%(")
+        local has_pest = content:match("%Wit%s*%(")
+          or content:match("%Wdescribe%s*%(")
+          or content:match("%Wuses%s*%(")
+          or content:match("^it%s*%(")
+          or content:match("^describe%s*%(")
+          or content:match("^uses%s*%(")
         local has_phpunit = content:match("extends%s+TestCase") or content:match("namespace%s+Tests")
         return has_phpunit ~= nil and has_pest == nil
       end
@@ -93,8 +102,10 @@ return {
       phpunit_adapter.discover_positions = phpunit_discover_positions
 
       opts.adapters = opts.adapters or {}
-      table.insert(opts.adapters, pest_adapter)
       table.insert(opts.adapters, phpunit_adapter)
+      table.insert(opts.adapters, pest_adapter)
+      
+      return opts
     end,
   },
 }
