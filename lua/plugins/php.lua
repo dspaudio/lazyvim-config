@@ -4,16 +4,6 @@ return {
     opts = { ensure_installed = { "php" } },
   },
   {
-    "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        intelephense = {
-          enabled = true,
-        },
-      },
-    },
-  },
-  {
     "nvim-neotest/neotest",
     optional = true,
     dependencies = {
