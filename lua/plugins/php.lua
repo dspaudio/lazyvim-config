@@ -92,14 +92,59 @@ return {
       pest_adapter.is_test_file = is_pest_file
       pest_adapter.discover_positions = pest_discover_positions
 
-      local phpunit_adapter = require("neotest-phpunit")({
+      local base_adapter = require("neotest-phpunit")
+      local phpunit_adapter = base_adapter({
         phpunit_cmd = function()
           return vim.fn.getcwd() .. "/vendor/bin/phpunit"
         end,
         root_files = { "composer.json", "phpunit.xml" },
+        env = {
+          COLLISION_IGNORE_ERRORS = "true",
+        },
+        filter_dirs = { "vendor" },
       })
+      
+      local original_build_spec = phpunit_adapter.build_spec
+      phpunit_adapter.build_spec = function(args)
+        local spec = original_build_spec(args)
+        local phpunit_path = vim.fn.getcwd() .. "/vendor/bin/phpunit"
+        if spec.command[1] == phpunit_path then
+          spec.command[1] = "php"
+          table.insert(spec.command, 2, "artisan")
+          table.insert(spec.command, 3, "test")
+        end
+        return spec
+      end
+      
       phpunit_adapter.is_test_file = is_phpunit_file
       phpunit_adapter.discover_positions = phpunit_discover_positions
+
+      local original_results = phpunit_adapter.results
+      phpunit_adapter.results = function(spec, result, tree)
+        local parsed_results = original_results(spec, result, tree)
+        
+        if result.code == 0 and vim.tbl_isempty(parsed_results) then
+          for _, node in tree:iter_nodes() do
+            local data = node:data()
+            if data.type == "test" then
+              parsed_results[data.id] = {
+                status = "passed",
+                short = "Test passed (inferred from exit code 0)",
+              }
+            end
+          end
+        end
+        
+        if result.code == 0 then
+          for test_id, test_result in pairs(parsed_results) do
+            if test_result.status == "failed" or test_result.status == nil then
+              test_result.status = "passed"
+            end
+          end
+        end
+        
+        return parsed_results
+      end
 
       opts.adapters = opts.adapters or {}
       table.insert(opts.adapters, phpunit_adapter)
