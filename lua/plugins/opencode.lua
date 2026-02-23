@@ -15,8 +15,8 @@ return {
         keymap = {
           editor = {
             ["<leader>og"] = { "toggle" },
-            ["<leader>oI"] = { "open_input" },
-            ["<leader>oi"] = { "open_input_new_session" },
+            ["<leader>oI"] = { "open_input", desc = "Open Input" },
+            ["<leader>oi"] = { "open_input_new_session", desc = "Open Input (New Session)" },
             ["<leader>oo"] = { "open_output" },
             ["<leader>ot"] = { "toggle_focus" },
             ["<leader>oT"] = { "timeline" },
