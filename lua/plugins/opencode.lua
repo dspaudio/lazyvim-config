@@ -46,7 +46,7 @@ return {
             ["<S-cr>"] = { "submit_input_prompt", mode = { "n", "i" } },
             ["<esc>"] = { "close" },
             ["<C-c>"] = { "cancel" },
-            ["~"] = { "mention_file", mode = "i" },
+            ["<M-~>"] = { "mention_file", mode = "i" },
             ["@"] = { "mention", mode = "i" },
             ["/"] = { "slash_commands", mode = "i" },
             ["#"] = { "context_items", mode = "i" },
