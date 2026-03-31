@@ -3,6 +3,10 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     opts = function(_, opts)
+      if vim.fn.has("mac") ~= 1 then
+        return
+      end
+
       local cached = ""
 
       local function fetch_input_source()
