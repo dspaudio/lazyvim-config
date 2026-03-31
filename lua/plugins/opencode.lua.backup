@@ -8,7 +8,7 @@ return {
         preferred_picker = nil,
         preferred_completion = nil,
         default_global_keymaps = true,
-        default_mode = "sisyphus",
+        default_mode = "Sisyphus",
         default_system_prompt = nil,
         keymap_prefix = "<leader>o",
         opencode_executable = "opencode",
