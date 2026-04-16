@@ -21,3 +21,18 @@ vim.api.nvim_create_autocmd("FileChangedShellPost", {
   pattern = "*",
   command = "echohl WarningMsg | echo '파일이 외부에서 변경되었습니다' | echohl None",
 })
+
+-- Git 브랜치 전환 후 존재하지 않는 파일의 버퍼를 자동 삭제
+vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained" }, {
+  callback = function(args)
+    local bufnr = args.buf
+    local name = vim.api.nvim_buf_get_name(bufnr)
+    if name ~= "" and not vim.uv.fs_stat(name) and vim.bo[bufnr].buftype == "" then
+      vim.schedule(function()
+        if vim.api.nvim_buf_is_valid(bufnr) then
+          vim.api.nvim_buf_delete(bufnr, { force = true })
+        end
+      end)
+    end
+  end,
+})

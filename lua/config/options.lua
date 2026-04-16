@@ -8,3 +8,4 @@ vim.opt.autoread = true
 vim.opt.wrap = true -- 화면 끝에서 soft wrap
 vim.opt.linebreak = true -- 단어 기준 줄바꿈
 vim.opt.breakindent = true -- 줄 바뀐 부분 들여쓰기 (선택 사항)
+vim.opt.spell = false -- spellfile 모듈 오류 방지
