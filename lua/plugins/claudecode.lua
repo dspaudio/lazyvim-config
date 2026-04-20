@@ -19,5 +19,6 @@ return {
   "coder/claudecode.nvim",
   opts = {
     terminal = terminal_opts,
+    focus_after_send = true,
   },
 }
