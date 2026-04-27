@@ -2,6 +2,14 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      -- 브랜치 전환 시 대량 파일 변경으로 LSP가 폭주하는 문제 차단
+      capabilities = {
+        workspace = {
+          didChangeWatchedFiles = {
+            dynamicRegistration = false,
+          },
+        },
+      },
       servers = {
         phpactor = {
           enabled = false,
